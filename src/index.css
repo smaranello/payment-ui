@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=IBM+Plex+Sans+Devanagari:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans+JP&display=swap");
+
 @theme {
-  --font-sans: "Segoe UI", system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans Devanagari", sans-serif;
+  --blue-bg: oklch(54.6% 0.245 262.881);
 }
 body {
   margin: 0;
