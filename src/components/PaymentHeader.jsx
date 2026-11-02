@@ -2,7 +2,7 @@ import logo from "../../public/logo.png";
 
 export default function PaymentHeader() {
   return (
-    <div className="flex w-full justify-between items-center">
+    <div className="flex w-full justify-between items-center border-b border-gray-200 p-4">
       <div className="flex items-center">
         <img src={logo} alt="logo" className="w-10 h-10 mr-2" />
         <p>Payment System</p>
