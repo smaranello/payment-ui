@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Card from "./components/Card";
 import PaymentHeader from "./components/PaymentHeader";
 import PaymentForm from "./components/PaymentForm";
@@ -21,16 +21,43 @@ export default function App() {
   const [expiryDate, setExpiryDate] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [cvv, setCvv] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [lockedHeight, setLockedHeight] = useState(null);
+  const contentRef = useRef(null);
   // Derive type from the current number so the logo updates as the user types
   const cardType = getCardType(cardNumber);
-  const showBackCard = focusField === "cvv";
+  const showBackCard = !isProcessing && focusField === "cvv";
+
+  const onPay = () => {
+    // Keep the Card height stable when the form unmounts
+    if (contentRef.current) {
+      setLockedHeight(contentRef.current.offsetHeight);
+    }
+    setIsProcessing(true);
+    setFocusField(null);
+  };
 
   return (
     <div className="flex h-screen items-center justify-center">
       <Card>
         <PaymentHeader />
-        <div className="grid w-full grid-cols-2">
+        <div
+          ref={contentRef}
+          className={
+            isProcessing
+              ? "flex w-full"
+              : "grid w-full grid-cols-2 items-stretch"
+          }
+          style={
+            lockedHeight
+              ? isProcessing
+                ? { height: lockedHeight }
+                : { minHeight: lockedHeight }
+              : undefined
+          }
+        >
           <PaymentCardScene
+            isProcessing={isProcessing}
             showBackCard={showBackCard}
             focusField={focusField}
             name={name}
@@ -39,18 +66,20 @@ export default function App() {
             cardType={cardType}
             cvv={cvv}
           />
-          <PaymentForm
-            focusField={focusField}
-            setFocusField={setFocusField}
-            name={name}
-            setName={setName}
-            expiryDate={expiryDate}
-            setExpiryDate={setExpiryDate}
-            cardNumber={cardNumber}
-            setCardNumber={setCardNumber}
-            cvv={cvv}
-            setCvv={setCvv}
-          />
+          {!isProcessing && (
+            <PaymentForm
+              onPay={onPay}
+              setFocusField={setFocusField}
+              name={name}
+              setName={setName}
+              expiryDate={expiryDate}
+              setExpiryDate={setExpiryDate}
+              cardNumber={cardNumber}
+              setCardNumber={setCardNumber}
+              cvv={cvv}
+              setCvv={setCvv}
+            />
+          )}
         </div>
       </Card>
     </div>

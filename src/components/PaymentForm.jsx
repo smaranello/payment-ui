@@ -16,6 +16,7 @@ export default function PaymentForm({
   setCardNumber,
   cvv,
   setCvv,
+  onPay,
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -23,7 +24,7 @@ export default function PaymentForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    isSubmitting(true);
+    onPay();
   };
 
   return (
@@ -143,7 +144,7 @@ export default function PaymentForm({
         </div>
         <button
           type="submit"
-          className="w-full rounded-md bg-[var(--blue-bg)] p-2 text-white"
+          className="w-full rounded-md bg-[var(--blue-bg)] p-2 text-white cursor-pointer"
         >
           Pay Now
         </button>
