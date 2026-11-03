@@ -21,8 +21,13 @@ export default function PaymentForm({
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    isSubmitting(true);
+  };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="p-4">
         <h1 className="text-2xl font-bold">Payment Details</h1>
         <p className="text-gray-500 text-sm mb-4">
@@ -131,6 +136,10 @@ export default function PaymentForm({
               />
             </div>
           </div>
+        </div>
+        <div className="flex items-center justify-between mb-4 transaction-amount">
+          <p className="text-gray-600 text-sm">Transaction Amount:</p>
+          <p className="text-lg font-bold text-blue-600">$100.00</p>
         </div>
         <button
           type="submit"

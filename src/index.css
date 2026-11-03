@@ -276,3 +276,8 @@ body {
 .payment-card-number.is-focused {
   outline-color: white;
 }
+.transaction-amount {
+  background-color: oklch(97.7% 0.013 236.62);
+  padding: 10px;
+  border-radius: 0.375rem;
+}
