@@ -23,6 +23,7 @@ export default function App() {
   const [cvv, setCvv] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [lockedHeight, setLockedHeight] = useState(null);
+  const [isDoneProcessing, setIsDoneProcessing] = useState(false);
   const contentRef = useRef(null);
   // Derive type from the current number so the logo updates as the user types
   const cardType = getCardType(cardNumber);
@@ -35,6 +36,9 @@ export default function App() {
     }
     setIsProcessing(true);
     setFocusField(null);
+    setTimeout(() => {
+      setIsDoneProcessing(true);
+    }, 3000);
   };
 
   return (
@@ -65,6 +69,7 @@ export default function App() {
             cardNumber={cardNumber}
             cardType={cardType}
             cvv={cvv}
+            isDoneProcessing={isDoneProcessing}
           />
           {!isProcessing && (
             <PaymentForm

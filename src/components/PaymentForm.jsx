@@ -24,8 +24,48 @@ export default function PaymentForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const nextErrors = {};
+    const trimmedName = (name || "").trim();
+    const digits = (cardNumber || "").replace(/\D/g, "");
+    const expiryDigits = (expiryDate || "").replace(/\D/g, "");
+    const month = Number(expiryDigits.slice(0, 2));
+    const isAmex = /^3[47]/.test(digits);
+    const expectedCardLength = isAmex ? 15 : 16;
+
+    if (!trimmedName) {
+      nextErrors.name = "Enter the name on the card";
+    }
+
+    if (digits.length !== expectedCardLength) {
+      nextErrors.cardNumber = `Enter a valid ${expectedCardLength}-digit card number`;
+    }
+
+    if (
+      expiryDigits.length !== 4 ||
+      month < 1 ||
+      month > 12
+    ) {
+      nextErrors.expiryDate = "Enter a valid expiry date (MM/YY)";
+    }
+
+    if (!(cvv || "").replace(/\D/g, "").match(/^\d{3}$/)) {
+      nextErrors.cvv = "Enter a valid 3-digit CVV";
+    }
+
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length > 0) {
+      return;
+    }
+
     onPay();
   };
+
+  const fieldClass = (hasError) =>
+    `w-full rounded-md border py-2 pr-2 pl-9 ${
+      hasError ? "border-red-500" : "border-gray-300"
+    }`;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -37,7 +77,7 @@ export default function PaymentForm({
         <label htmlFor="name" className="text-sm font-bold text-gray-500">
           Name on Card
         </label>
-        <div className="relative mb-2">
+        <div className="relative mb-1">
           <UserIcon className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-500" />
           <input
             type="text"
@@ -45,21 +85,25 @@ export default function PaymentForm({
             value={name || ""}
             onFocus={() => setFocusField("name")}
             onBlur={() => setFocusField(null)}
-            onChange={(e) =>
+            onChange={(e) => {
+              setErrors((prev) => ({ ...prev, name: undefined }));
               setName(
                 e.target.value
                   .replace(/[^\p{L}\s'.-]/gu, "")
                   .replace(/\s+/g, " "),
-              )
-            }
+              );
+            }}
             autoComplete="cc-name"
-            className="w-full rounded-md border border-gray-300 py-2 pr-2 pl-9"
+            className={fieldClass(errors.name)}
           />
         </div>
+        {errors.name && (
+          <p className="mb-2 text-xs text-red-500">{errors.name}</p>
+        )}
         <label htmlFor="cardNumber" className="text-sm font-bold text-gray-500">
           Card Number
         </label>
-        <div className="relative mb-2">
+        <div className="relative mb-1">
           <CreditCardIcon className="pointer-events-none absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-500" />
           <input
             type="text"
@@ -67,14 +111,18 @@ export default function PaymentForm({
             value={cardNumber || ""}
             onFocus={() => setFocusField("cardNumber")}
             onBlur={() => setFocusField(null)}
-            onChange={(e) =>
-              setCardNumber(e.target.value.replace(/\D/g, "").slice(0, 16))
-            }
+            onChange={(e) => {
+              setErrors((prev) => ({ ...prev, cardNumber: undefined }));
+              setCardNumber(e.target.value.replace(/\D/g, "").slice(0, 16));
+            }}
             inputMode="numeric"
             maxLength={16}
-            className="w-full rounded-md border border-gray-300 py-2 pr-2 pl-9"
+            className={fieldClass(errors.cardNumber)}
           />
         </div>
+        {errors.cardNumber && (
+          <p className="mb-2 text-xs text-red-500">{errors.cardNumber}</p>
+        )}
         <div className="mb-6 grid w-full grid-cols-2 gap-4">
           <div>
             <label
@@ -92,6 +140,7 @@ export default function PaymentForm({
                 onFocus={() => setFocusField("expiry")}
                 onBlur={() => setFocusField(null)}
                 onChange={(e) => {
+                  setErrors((prev) => ({ ...prev, expiryDate: undefined }));
                   const raw = e.target.value;
                   const digits = raw.replace(/\D/g, "").slice(0, 4);
                   const prev = expiryDate || "";
@@ -110,10 +159,13 @@ export default function PaymentForm({
                 }}
                 inputMode="numeric"
                 maxLength={5}
-                className="w-full rounded-md border border-gray-300 py-2 pr-2 pl-9"
+                className={fieldClass(errors.expiryDate)}
                 placeholder="MM/YY"
               />
             </div>
+            {errors.expiryDate && (
+              <p className="mt-1 text-xs text-red-500">{errors.expiryDate}</p>
+            )}
           </div>
           <div>
             <label htmlFor="cvv" className="text-sm font-bold text-gray-500">
@@ -127,15 +179,19 @@ export default function PaymentForm({
                 value={cvv || ""}
                 onFocus={() => setFocusField("cvv")}
                 onBlur={() => setFocusField(null)}
-                onChange={(e) =>
-                  setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))
-                }
+                onChange={(e) => {
+                  setErrors((prev) => ({ ...prev, cvv: undefined }));
+                  setCvv(e.target.value.replace(/\D/g, "").slice(0, 3));
+                }}
                 inputMode="numeric"
                 maxLength={3}
-                className="w-full rounded-md border border-gray-300 py-2 pr-2 pl-9"
+                className={fieldClass(errors.cvv)}
                 placeholder="123"
               />
             </div>
+            {errors.cvv && (
+              <p className="mt-1 text-xs text-red-500">{errors.cvv}</p>
+            )}
           </div>
         </div>
         <div className="flex items-center justify-between mb-4 transaction-amount">

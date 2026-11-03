@@ -15,6 +15,39 @@ body {
   width: 350px;
   height: 220px;
   perspective: 1200px;
+  transition: filter 0.45s ease;
+}
+
+/* Brand glow while processing */
+.payment-card-scene.is-processing-glow.card-glow-visa {
+  filter:
+    drop-shadow(0 0 10px rgba(20, 52, 203, 0.55))
+    drop-shadow(0 0 24px rgba(26, 31, 113, 0.35));
+}
+
+.payment-card-scene.is-processing-glow.card-glow-mastercard {
+  filter:
+    drop-shadow(0 0 10px rgba(255, 95, 0, 0.55))
+    drop-shadow(0 0 24px rgba(235, 0, 27, 0.35));
+}
+
+.payment-card-scene.is-processing-glow.card-glow-amex {
+  filter:
+    drop-shadow(0 0 10px rgba(0, 111, 207, 0.55))
+    drop-shadow(0 0 24px rgba(20, 119, 190, 0.35));
+}
+
+.payment-card-scene.is-processing-glow.card-glow-default {
+  filter:
+    drop-shadow(0 0 10px rgba(30, 77, 184, 0.55))
+    drop-shadow(0 0 24px rgba(22, 58, 138, 0.35));
+}
+
+/* Success glow */
+.payment-card-scene.is-done-glow {
+  filter:
+    drop-shadow(0 0 10px rgba(34, 197, 94, 0.55))
+    drop-shadow(0 0 24px rgba(22, 163, 74, 0.35));
 }
 
 .payment-card-flipper {

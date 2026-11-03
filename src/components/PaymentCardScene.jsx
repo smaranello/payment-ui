@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import PaymentCardUX from "./PaymentCardUX";
 import PaymentCardBackUX from "./PaymentCardBackUX";
+import { CheckCircleIcon } from "@heroicons/react/24/outline";
 
 const flipTransition = {
   type: "spring",
@@ -17,6 +18,7 @@ export default function PaymentCardScene({
   cardNumber,
   cardType,
   cvv,
+  isDoneProcessing,
 }) {
   return (
     <div
@@ -24,7 +26,16 @@ export default function PaymentCardScene({
         isProcessing ? "h-full min-h-full flex-1 gap-6" : "h-full"
       }`}
     >
-      <div className="payment-card-scene">
+      <div
+        className={[
+          "payment-card-scene",
+          isProcessing && !isDoneProcessing ? "is-processing-glow" : "",
+          isDoneProcessing ? "is-done-glow" : "",
+          cardType && cardType !== "unknown" ? `card-glow-${cardType}` : "card-glow-default",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         <motion.div
           className="payment-card-flipper"
           initial={false}
@@ -50,9 +61,20 @@ export default function PaymentCardScene({
         </motion.div>
       </div>
       {isProcessing && (
-        <p className="text-sm font-medium text-slate-700">
-          Processing Secure Transaction...
-        </p>
+        <div className="flex h-20 w-full flex-col items-center justify-center gap-2">
+          {!isDoneProcessing ? (
+            <p className="text-sm font-medium text-slate-700">
+              Processing Secure Transaction...
+            </p>
+          ) : (
+            <>
+              <CheckCircleIcon className="h-10 w-10 text-green-500" />
+              <p className="text-lg font-medium text-slate-700">
+                Transaction Successful
+              </p>
+            </>
+          )}
+        </div>
       )}
     </div>
   );
