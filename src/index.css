@@ -11,32 +11,103 @@ body {
   min-height: 100vh;
   background-color: #f0f0f0;
 }
-.payment-card-ux {
-  position: relative;
+.payment-card-scene {
   width: 350px;
   height: 220px;
+  perspective: 1200px;
+}
+
+.payment-card-flipper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.payment-card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.payment-card-face-back {
+  transform: rotateY(180deg);
+}
+
+.payment-card-ux,
+.payment-card-back-ux {
+  position: relative;
+  width: 100%;
+  height: 100%;
   background: linear-gradient(135deg, #0b1d4a 0%, #163a8a 55%, #1e4db8 100%);
   border-radius: 16px;
   box-shadow: 0 12px 28px rgba(11, 29, 74, 0.35);
-  transition: background 0.35s ease, box-shadow 0.35s ease;
+  transition:
+    background 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
 /* Visa — brand navy / Visa blue */
-.payment-card-ux.card-visa {
+.payment-card-ux.card-visa,
+.payment-card-back-ux.card-visa {
   background: linear-gradient(135deg, #1a1f71 0%, #1434cb 55%, #2a6bbf 100%);
   box-shadow: 0 12px 28px rgba(26, 31, 113, 0.4);
 }
 
 /* Mastercard — brand red / orange */
-.payment-card-ux.card-mastercard {
+.payment-card-ux.card-mastercard,
+.payment-card-back-ux.card-mastercard {
   background: linear-gradient(135deg, #8b0000 0%, #eb001b 40%, #ff5f00 100%);
   box-shadow: 0 12px 28px rgba(235, 0, 27, 0.4);
 }
 
 /* American Express — Amex blue */
-.payment-card-ux.card-amex {
+.payment-card-ux.card-amex,
+.payment-card-back-ux.card-amex {
   background: linear-gradient(135deg, #002663 0%, #006fcf 55%, #1477be 100%);
   box-shadow: 0 12px 28px rgba(0, 38, 99, 0.4);
+}
+
+.payment-card-magnetic-stripe {
+  position: absolute;
+  top: 28px;
+  right: 0;
+  left: 0;
+  height: 44px;
+  background: #1a1a1a;
+}
+
+.payment-card-cvv-band {
+  position: absolute;
+  top: 96px;
+  right: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 4px;
+  background: #f3f4f6;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.payment-card-cvv-label {
+  color: #6b7280;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.payment-card-cvv-value {
+  min-width: 2.5rem;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-align: right;
 }
 
 .payment-card-top {

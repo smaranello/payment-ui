@@ -7,7 +7,6 @@ import {
 } from "@heroicons/react/24/outline";
 
 export default function PaymentForm({
-  focusField,
   setFocusField,
   name,
   setName,
@@ -15,9 +14,9 @@ export default function PaymentForm({
   setExpiryDate,
   cardNumber,
   setCardNumber,
+  cvv,
+  setCvv,
 }) {
-  const [cvv, setCvv] = useState("");
-
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -93,8 +92,14 @@ export default function PaymentForm({
               <input
                 type="text"
                 id="cvv"
-                value={cvv}
-                onChange={(e) => setCvv(e.target.value)}
+                value={cvv || ""}
+                onFocus={() => setFocusField("cvv")}
+                onBlur={() => setFocusField(null)}
+                onChange={(e) =>
+                  setCvv(e.target.value.replace(/\D/g, "").slice(0, 3))
+                }
+                inputMode="numeric"
+                maxLength={3}
                 className="w-full rounded-md border border-gray-300 py-2 pr-2 pl-9"
               />
             </div>

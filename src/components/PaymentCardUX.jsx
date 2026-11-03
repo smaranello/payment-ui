@@ -68,52 +68,50 @@ export default function PaymentCardUX({
   const digits = (cardNumber || "").replace(/\D/g, "").slice(0, 16);
 
   return (
-    <div className="flex items-center justify-center bg-sky-100/50 p-4">
+    <div
+      className={`payment-card-ux${cardType && cardType !== "unknown" ? ` card-${cardType}` : ""}`}
+    >
+      <div className="payment-card-top">
+        <div className="payment-card-chip" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="payment-card-logo">
+          {CARD_LOGOS[cardType] && (
+            <img
+              className={`payment-card-logo-img payment-card-logo-${cardType}`}
+              src={CARD_LOGOS[cardType]}
+              alt={cardType}
+            />
+          )}
+        </div>
+      </div>
       <div
-        className={`payment-card-ux${cardType && cardType !== "unknown" ? ` card-${cardType}` : ""}`}
+        className={`payment-card-number ${focusField === "cardNumber" ? "is-focused" : ""}`}
       >
-        <div className="payment-card-top">
-          <div className="payment-card-chip" aria-hidden="true">
-            <span />
-            <span />
-            <span />
-            <span />
-          </div>
-          <div className="payment-card-logo">
-            {CARD_LOGOS[cardType] && (
-              <img
-                className={`payment-card-logo-img payment-card-logo-${cardType}`}
-                src={CARD_LOGOS[cardType]}
-                alt={cardType}
-              />
-            )}
-          </div>
+        <DigitGroup digits={digits} startIndex={0} />
+        <DigitGroup digits={digits} startIndex={4} />
+        <DigitGroup digits={digits} startIndex={8} />
+        <DigitGroup digits={digits} startIndex={12} />
+      </div>
+      <div className="payment-cardholder-name-expiry">
+        <div
+          className={`payment-cardholder-name ${focusField === "name" ? "is-focused" : ""}`}
+        >
+          <span className="payment-card-label">CARDHOLDER NAME</span>
+          <span className="payment-card-value">
+            {name ? name.toUpperCase() : "\u00A0"}
+          </span>
         </div>
         <div
-          className={`payment-card-number ${focusField === "cardNumber" ? "is-focused" : ""}`}
+          className={`payment-cardholder-expiry ${focusField === "expiry" ? "is-focused" : ""}`}
         >
-          <DigitGroup digits={digits} startIndex={0} />
-          <DigitGroup digits={digits} startIndex={4} />
-          <DigitGroup digits={digits} startIndex={8} />
-          <DigitGroup digits={digits} startIndex={12} />
-        </div>
-        <div className="payment-cardholder-name-expiry">
-          <div
-            className={`payment-cardholder-name ${focusField === "name" ? "is-focused" : ""}`}
-          >
-            <span className="payment-card-label">CARDHOLDER NAME</span>
-            <span className="payment-card-value">
-              {name ? name.toUpperCase() : "\u00A0"}
-            </span>
-          </div>
-          <div
-            className={`payment-cardholder-expiry ${focusField === "expiry" ? "is-focused" : ""}`}
-          >
-            <span className="payment-card-label">EXPIRY DATE</span>
-            <span className="payment-card-value">
-              {expiryDate ? expiryDate : "\u00A0"}
-            </span>
-          </div>
+          <span className="payment-card-label">EXPIRY DATE</span>
+          <span className="payment-card-value">
+            {expiryDate ? expiryDate : "\u00A0"}
+          </span>
         </div>
       </div>
     </div>
