@@ -6,11 +6,18 @@ import {
   KeyIcon,
 } from "@heroicons/react/24/outline";
 
-export default function PaymentForm() {
-  const [name, setName] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
+export default function PaymentForm({
+  focusField,
+  setFocusField,
+  name,
+  setName,
+  expiryDate,
+  setExpiryDate,
+  cardNumber,
+  setCardNumber,
+}) {
   const [cvv, setCvv] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,7 +37,9 @@ export default function PaymentForm() {
           <input
             type="text"
             id="name"
-            value={name}
+            value={name || ""}
+            onFocus={() => setFocusField("name")}
+            onBlur={() => setFocusField(null)}
             onChange={(e) => setName(e.target.value)}
             className="w-full rounded-md border border-gray-300 py-2 pr-2 pl-9"
           />
@@ -43,8 +52,14 @@ export default function PaymentForm() {
           <input
             type="text"
             id="cardNumber"
-            value={cardNumber}
-            onChange={(e) => setCardNumber(e.target.value)}
+            value={cardNumber || ""}
+            onFocus={() => setFocusField("cardNumber")}
+            onBlur={() => setFocusField(null)}
+            onChange={(e) =>
+              setCardNumber(e.target.value.replace(/\D/g, "").slice(0, 16))
+            }
+            inputMode="numeric"
+            maxLength={16}
             className="w-full rounded-md border border-gray-300 py-2 pr-2 pl-9"
           />
         </div>
@@ -61,7 +76,9 @@ export default function PaymentForm() {
               <input
                 type="text"
                 id="expiryDate"
-                value={expiryDate}
+                value={expiryDate || ""}
+                onFocus={() => setFocusField("expiry")}
+                onBlur={() => setFocusField(null)}
                 onChange={(e) => setExpiryDate(e.target.value)}
                 className="w-full rounded-md border border-gray-300 py-2 pr-2 pl-9"
               />
