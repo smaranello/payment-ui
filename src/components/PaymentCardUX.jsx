@@ -69,7 +69,9 @@ export default function PaymentCardUX({
 
   return (
     <div className="flex items-center justify-center bg-sky-100/50 p-4">
-      <div className="payment-card-ux">
+      <div
+        className={`payment-card-ux${cardType && cardType !== "unknown" ? ` card-${cardType}` : ""}`}
+      >
         <div className="payment-card-top">
           <div className="payment-card-chip" aria-hidden="true">
             <span />

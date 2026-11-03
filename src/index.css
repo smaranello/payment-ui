@@ -18,6 +18,25 @@ body {
   background: linear-gradient(135deg, #0b1d4a 0%, #163a8a 55%, #1e4db8 100%);
   border-radius: 16px;
   box-shadow: 0 12px 28px rgba(11, 29, 74, 0.35);
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Visa — brand navy / Visa blue */
+.payment-card-ux.card-visa {
+  background: linear-gradient(135deg, #1a1f71 0%, #1434cb 55%, #2a6bbf 100%);
+  box-shadow: 0 12px 28px rgba(26, 31, 113, 0.4);
+}
+
+/* Mastercard — brand red / orange */
+.payment-card-ux.card-mastercard {
+  background: linear-gradient(135deg, #8b0000 0%, #eb001b 40%, #ff5f00 100%);
+  box-shadow: 0 12px 28px rgba(235, 0, 27, 0.4);
+}
+
+/* American Express — Amex blue */
+.payment-card-ux.card-amex {
+  background: linear-gradient(135deg, #002663 0%, #006fcf 55%, #1477be 100%);
+  box-shadow: 0 12px 28px rgba(0, 38, 99, 0.4);
 }
 
 .payment-card-top {
