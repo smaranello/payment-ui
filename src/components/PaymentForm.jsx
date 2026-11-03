@@ -39,7 +39,14 @@ export default function PaymentForm({
             value={name || ""}
             onFocus={() => setFocusField("name")}
             onBlur={() => setFocusField(null)}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) =>
+              setName(
+                e.target.value
+                  .replace(/[^\p{L}\s'.-]/gu, "")
+                  .replace(/\s+/g, " "),
+              )
+            }
+            autoComplete="cc-name"
             className="w-full rounded-md border border-gray-300 py-2 pr-2 pl-9"
           />
         </div>
@@ -78,8 +85,27 @@ export default function PaymentForm({
                 value={expiryDate || ""}
                 onFocus={() => setFocusField("expiry")}
                 onBlur={() => setFocusField(null)}
-                onChange={(e) => setExpiryDate(e.target.value)}
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  const digits = raw.replace(/\D/g, "").slice(0, 4);
+                  const prev = expiryDate || "";
+                  const isDeleting = raw.length < prev.length;
+
+                  if (digits.length === 0) {
+                    setExpiryDate("");
+                  } else if (digits.length < 2) {
+                    setExpiryDate(digits);
+                  } else if (digits.length === 2) {
+                    // Add slash as soon as month is complete; allow backspace to remove it
+                    setExpiryDate(isDeleting ? digits : `${digits}/`);
+                  } else {
+                    setExpiryDate(`${digits.slice(0, 2)}/${digits.slice(2)}`);
+                  }
+                }}
+                inputMode="numeric"
+                maxLength={5}
                 className="w-full rounded-md border border-gray-300 py-2 pr-2 pl-9"
+                placeholder="MM/YY"
               />
             </div>
           </div>
@@ -101,6 +127,7 @@ export default function PaymentForm({
                 inputMode="numeric"
                 maxLength={3}
                 className="w-full rounded-md border border-gray-300 py-2 pr-2 pl-9"
+                placeholder="123"
               />
             </div>
           </div>
