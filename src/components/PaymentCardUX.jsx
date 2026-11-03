@@ -1,5 +1,11 @@
 import { AnimatePresence, motion } from "motion/react";
 
+const CARD_LOGOS = {
+  visa: "/visa.svg",
+  mastercard: "/mastercard.svg",
+  amex: "/amex.svg",
+};
+
 // Spring used when a digit slides in/out of a card number slot
 const digitTransition = {
   type: "spring",
@@ -56,6 +62,7 @@ export default function PaymentCardUX({
   name,
   expiryDate,
   cardNumber,
+  cardType,
 }) {
   // Keep only digits so spaces/letters don't shift the 16 card slots
   const digits = (cardNumber || "").replace(/\D/g, "").slice(0, 16);
@@ -70,7 +77,15 @@ export default function PaymentCardUX({
             <span />
             <span />
           </div>
-          <div className="payment-card-logo"></div>
+          <div className="payment-card-logo">
+            {CARD_LOGOS[cardType] && (
+              <img
+                className={`payment-card-logo-img payment-card-logo-${cardType}`}
+                src={CARD_LOGOS[cardType]}
+                alt={cardType}
+              />
+            )}
+          </div>
         </div>
         <div
           className={`payment-card-number ${focusField === "cardNumber" ? "is-focused" : ""}`}
